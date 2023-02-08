@@ -66,19 +66,19 @@ class Board:
 
         self.count = 0
 
-        self.field = [["O"] * size for _ in range(size)]
+        self.field = [["♥"] * size for _ in range(size)]
 
         self.busy = []
         self.ships = []
 
     def __str__(self):
         res = ""
-        res += "  | 1 | 2 | 3 | 4 | 5 | 6 |"
+        res += "   1  2  3  4  5  6  "
         for i, row in enumerate(self.field):
-            res += f"\n{i + 1} | " + " | ".join(row) + " |"
+            res += f"\n{i + 1}  " + "  ".join(row) + " "
 
         if self.hid:
-            res = res.replace("■", "O")
+            res = res.replace("⚓","♥")
         return res
 
     def out(self, d):
@@ -95,7 +95,7 @@ class Board:
                 cur = Dot(d.x + dx, d.y + dy)
                 if not (self.out(cur)) and cur not in self.busy:
                     if verb:
-                        self.field[cur.x][cur.y] = "T"
+                        self.field[cur.x][cur.y] = "♻"
                     self.busy.append(cur)
 
     def add_ship(self, ship):
@@ -103,7 +103,7 @@ class Board:
             if self.out(d) or d in self.busy:
                 raise BoardWrongShipException()
         for d in ship.dots:
-            self.field[d.x][d.y] = "■"
+            self.field[d.x][d.y] = "⚓"
             self.busy.append(d)
 
         self.ships.append(ship)
@@ -121,7 +121,7 @@ class Board:
         for ship in self.ships:
             if ship.shooten(d):
                 ship.lives -= 1
-                self.field[d.x][d.y] = "X"
+                self.field[d.x][d.y] = "♨"
                 if ship.lives == 0:
                     self.count += 1
                     self.contour(ship, verb=True)
@@ -131,7 +131,7 @@ class Board:
                     print("Ты теперь дырявый!")
                     return True
 
-        self.field[d.x][d.y] = "T"
+        self.field[d.x][d.y] = "😛"
         print("Акелла промахнулся!!!:)")
         return False
 
